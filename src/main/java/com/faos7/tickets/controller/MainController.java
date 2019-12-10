@@ -7,12 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.Instant;
 import java.util.Map;
 
 @RestController
@@ -46,13 +44,8 @@ public class MainController {
     }
 
     @PostMapping("/apply")
-    public ResponseEntity<Long> apply(@Valid @RequestBody ExternalCreateRequest req, BindingResult bindingResult) throws Exception {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<Long> apply(@Valid @RequestBody ExternalCreateRequest req) throws Exception {
         try {
-//            Integer id = Integer.parseInt(req.get("id").toString());
-//            Instant departureTime = Instant.parse(req.get("time").toString());
             Long resp = requestService.createRequest(req.getNumber(), req.getDepartureTime());
             return resp != null ? ResponseEntity.ok(resp) : ResponseEntity.notFound().build();
 
