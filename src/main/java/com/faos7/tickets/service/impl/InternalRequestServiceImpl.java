@@ -30,6 +30,7 @@ public class InternalRequestServiceImpl implements InternalRequestService {
     @Autowired
     private RestTemplate restTemplate;
 
+
     @Override
     public Long createRequest(Integer routeId, Instant departureTime) {
         if (routeRepository.findById(routeId).isPresent()){
@@ -69,7 +70,7 @@ public class InternalRequestServiceImpl implements InternalRequestService {
      */
     @Override
     @Scheduled(cron = "0 * * * * ?")
-    public void ProcessInternalRequests() {
+    public void processInternalRequests() {
         LOGGER.debug("ProcessInternalRequests invoked");
         final String uri = "http://localhost:8080/status/update";
 
@@ -79,7 +80,7 @@ public class InternalRequestServiceImpl implements InternalRequestService {
                 InternalRequest request = optionalRequest.get();
                 try {
                     LOGGER.info(String.format("Attempting to update status of request with id %s", request.getId()));
-                    request.setStatus(restTemplate.postForEntity(uri, null,Status.class).getBody());
+                    request.setStatus(restTemplate.postForEntity(uri, null, Status.class).getBody());
                     LOGGER.info(String.format("New status of request with id %s is %s", request.getId(), request.getStatus()));
                 } finally {
                     internalRequestRepository.save(request);

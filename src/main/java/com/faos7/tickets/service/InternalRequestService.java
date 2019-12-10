@@ -10,7 +10,7 @@ public interface InternalRequestService {
 
     Status checkStatus(Long requestId);
 
-    void ProcessInternalRequests();
+    void processInternalRequests();
 
     Status remoteStatus();
 
